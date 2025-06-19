@@ -1,0 +1,22 @@
+FROM node:16-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY backend/package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy all backend files
+COPY backend/ ./
+
+# Create .env file from example if it doesn't exist
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
+# Expose port 5000
+EXPOSE 5000
+
+# Start the server
+CMD ["npm", "start"]
